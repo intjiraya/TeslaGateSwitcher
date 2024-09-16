@@ -45,13 +45,13 @@ Once installed and configured, the plugin will automatically apply the specified
 To toggle the Tesla gates, use the following command in the game:
 
 ```
-!TeslaToggle
+TeslaToggle
 ```
 
 You can also use the alias:
 
 ```
-!tt
+tt
 ```
 
 ## Support
