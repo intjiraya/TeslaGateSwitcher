@@ -12,17 +12,17 @@ namespace TeslaGateSwitcher
         public override string Name { get; } = "TeslaGateSwitcher";
         public override string Prefix { get; } = "TeslaGateSwitcher";
 
-        public override System.Version Version { get; } = new System.Version(1, 0, 0);
-        public override System.Version RequiredExiledVersion { get; } = new System.Version(8, 9, 11);
-        public override PluginPriority Priority { get; } = PluginPriority.Medium;
+        public override Version Version => new Version(1, 1, 0);
+        public override Version RequiredExiledVersion => new Version(8, 9, 11);
+        public override PluginPriority Priority => PluginPriority.Medium;
 
         public bool IsTeslaGatesActivated { get; set; }
-        public static Plugin plugin { get; private set; }
+        public static Plugin Instance { get; private set; }
 
 
         public override void OnEnabled()
         {
-            plugin = this;
+            Instance = this;
             IsTeslaGatesActivated = Config.EnableTeslaGatesAtRoundStart;
             Exiled.Events.Handlers.Player.TriggeringTesla += OnTriggeringTesla;
             base.OnEnabled();
@@ -34,7 +34,7 @@ namespace TeslaGateSwitcher
             base.OnDisabled();
         }
 
-        public void OnTriggeringTesla(TriggeringTeslaEventArgs ev)
+        private void OnTriggeringTesla(TriggeringTeslaEventArgs ev)
         {
             if (!IsTeslaGatesActivated)
             {
@@ -46,16 +46,15 @@ namespace TeslaGateSwitcher
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class TeslaToggle : ICommand
     {
-        public string Command => "TeslaToggle";
-
-        public string[] Aliases => new string[] { "tt" };
-
+        public string Command => "teslatoggle";
+        public string[] Aliases => new[] { "tt", "tesla" };
         public string Description => "Toggle tesla gates.";
+
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Plugin.plugin.IsTeslaGatesActivated = !Plugin.plugin.IsTeslaGatesActivated;
-            response = $"Tesla gates toggled to: {(Plugin.plugin.IsTeslaGatesActivated ? "Enabled" : "Disabled")} mode";
+            Plugin.Instance.IsTeslaGatesActivated = !Plugin.Instance.IsTeslaGatesActivated;
+            response = $"Tesla gates toggled to: {(Plugin.Instance.IsTeslaGatesActivated ? "Enabled" : "Disabled")} mode";
             return true;
         }
     }
